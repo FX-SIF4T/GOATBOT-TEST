@@ -1,0 +1,67 @@
+{
+  "health": {
+    "/home/runner/workspace/accounts/account.txt": 60,
+    "/home/runner/workspace/accounts/account3.txt": 20,
+    "/home/runner/workspace/accounts/account4.txt": 60,
+    "/home/runner/workspace/accounts/account5.txt": 60
+  },
+  "failCount": {
+    "/home/runner/workspace/accounts/account.txt": 5,
+    "/home/runner/workspace/accounts/account3.txt": 4,
+    "/home/runner/workspace/accounts/account4.txt": 4,
+    "/home/runner/workspace/accounts/account5.txt": 4
+  },
+  "failType": {
+    "/home/runner/workspace/accounts/account.txt": "loginFail",
+    "/home/runner/workspace/accounts/account3.txt": "loginFail",
+    "/home/runner/workspace/accounts/account4.txt": "loginFail",
+    "/home/runner/workspace/accounts/account5.txt": "loginFail"
+  },
+  "failReason": {
+    "/home/runner/workspace/accounts/account.txt": "Startup invalid cookie: missing c_user",
+    "/home/runner/workspace/accounts/account3.txt": "Startup invalid cookie: no valid lines",
+    "/home/runner/workspace/accounts/account4.txt": "Startup invalid cookie: no valid lines",
+    "/home/runner/workspace/accounts/account5.txt": "Startup invalid cookie: no valid lines"
+  },
+  "lastFailTime": {
+    "/home/runner/workspace/accounts/account.txt": 1783659610314,
+    "/home/runner/workspace/accounts/account3.txt": 1783659610315,
+    "/home/runner/workspace/accounts/account4.txt": 1783659610315,
+    "/home/runner/workspace/accounts/account5.txt": 1783659610316
+  },
+  "totalUptimeMs": {
+    "/home/runner/workspace/accounts/account.txt": 0,
+    "/home/runner/workspace/accounts/account3.txt": 0,
+    "/home/runner/workspace/accounts/account4.txt": 0,
+    "/home/runner/workspace/accounts/account5.txt": 0
+  },
+  "sessionCount": {
+    "/home/runner/workspace/accounts/account.txt": 0,
+    "/home/runner/workspace/accounts/account3.txt": 0,
+    "/home/runner/workspace/accounts/account4.txt": 0,
+    "/home/runner/workspace/accounts/account5.txt": 0
+  },
+  "msgSent": {
+    "/home/runner/workspace/accounts/account.txt": 0,
+    "/home/runner/workspace/accounts/account3.txt": 0,
+    "/home/runner/workspace/accounts/account4.txt": 0,
+    "/home/runner/workspace/accounts/account5.txt": 0
+  },
+  "msgFailed": {
+    "/home/runner/workspace/accounts/account.txt": 5,
+    "/home/runner/workspace/accounts/account3.txt": 4,
+    "/home/runner/workspace/accounts/account4.txt": 4,
+    "/home/runner/workspace/accounts/account5.txt": 4
+  },
+  "priority": {
+    "/home/runner/workspace/accounts/account.txt": 1,
+    "/home/runner/workspace/accounts/account3.txt": 1,
+    "/home/runner/workspace/accounts/account4.txt": 1,
+    "/home/runner/workspace/accounts/account5.txt": 1
+  },
+  "lockedAccounts": [],
+  "currentIndex": 0,
+  "switchCount": 0,
+  "switchHistory": [],
+  "savedAt": "2026-07-10T05:00:10.316Z"
+}
