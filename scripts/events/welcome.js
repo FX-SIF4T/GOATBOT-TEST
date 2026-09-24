@@ -42,7 +42,7 @@ async function fetchCard(uid, name, groupName, memberCount, bg) {
     return imgPath;
 }
 
-async function flushBatch(threadID, batch, api, threadsData) {
+async function flushBatch(threadID, batch, api, threadsData, authorName) {
     try {
         const threadData = await threadsData.get(threadID);
         if (threadData?.settings?.sendWelcomeMessage === false) return;
@@ -64,27 +64,36 @@ async function flushBatch(threadID, batch, api, threadsData) {
         const session = getSession(h);
 
         const defaultTemplate =
-            "👋 Welcome to {boxName}, {userName}!\n" +
-            "You are member #{count} 🎉\n" +
-            "Have a great {session}! 😊\n" +
-            "Type {prefix}help for all commands.";
+            "╭── [ 🎁 ᴡ є ʟ ᴄ σ ϻ є  ʙ ᴧ ʙ ʏ 🎁 ]\n" +
+            "│\n" +
+            "├── 🍼 ⇛ η ᴧ ϻ є : {userNameTag}\n" +
+            "├── 🎁 ⇛ ɢ ʀ σ υ ᴘ : {boxName}\n" +
+            "├── 🩷 ⇛ ϻ є ϻ ʙ є ʀ s : {count}\n" +
+            "├── 👤 ⇛ ᴀᴅᴅᴇᴅ ʙʏ : {authorName}\n" +
+            "│\n" +
+            "├── [  ɢ ʀ σ υ ᴘ  ʀ υ ʟ є s ]\n" +
+            "├── 😽 ⇛ ʀєsᴘєᴄᴛ ᴧʟʟ ϻєϻʙєʀs .\n" +
+            "├── 🎁 ⇛ ησ sᴘᴧϻ σʀ 18+ ᴄσηᴛєηᴛ .\n" +
+            "├── ✨ ⇛ ʜᴧᴠє ᴧ ɢᴏᴏᴅ ᴛɪᴍє ʜєʀє !\n" +
+            "│\n" +
+            "╰── ᴘ σ ᴡ є ʀ є ᴅ  ʙ ʏ  s ɪ ꜰ υ";
 
         for (const { uid, name } of batch) {
             if (dataBanned.some(b => b.id == uid)) continue;
 
             const template = threadData?.data?.welcomeMessage || defaultTemplate;
-            const hasMentionTag = template.includes("{userNameTag}");
 
             const body = template
                 .replace(/\{userName\}|\{userNameTag\}/g, name)
                 .replace(/\{boxName\}|\{threadName\}/g, threadData?.threadName || groupName)
                 .replace(/\{count\}/g, memberCount)
                 .replace(/\{session\}/g, session)
-                .replace(/\{prefix\}/g, prefix);
+                .replace(/\{prefix\}/g, prefix)
+                .replace(/\{authorName\}/g, authorName);
 
             const form = {
                 body,
-                mentions: hasMentionTag ? [{ tag: name, id: uid }] : [{ tag: name, id: uid }]
+                mentions: [{ tag: name, id: uid }]
             };
 
             let imgPath = null;
@@ -110,7 +119,7 @@ async function flushBatch(threadID, batch, api, threadsData) {
 module.exports = {
     config: {
         name:        "welcome",
-        version:     "3.0.0",
+        version:     "1.0.0",
         author:      "SIFAT",
         category:    "events",
         description: "Auto welcome new members with styled image card, batch support and custom templates."
@@ -123,21 +132,31 @@ module.exports = {
             session3:            "afternoon",
             session4:            "evening",
             botJoinMessage:
-                "🤖 Thanks for adding me!\n" +
-                "◈ Prefix : %1\n" +
-                "◈ Commands: %1help",
+                "😻 Thanks for adding me!\n" +
+                "❏　Prefix : %1\n" +
+                "❐　Commands: %1help",
             defaultWelcomeMessage:
-                "👋 Welcome to {boxName}, {userName}!\n" +
-                "You are member #{count} 🎉\n" +
-                "Have a great {session}! 😊"
+                "╭── [ 🎁 ᴡ є ʟ ᴄ σ ϻ є  ʙ ᴧ ʙ ʏ 🎁 ]\n" +
+                "│\n" +
+                "├── 🍼 ⇛ η ᴧ ϻ є : {userNameTag}\n" +
+                "├── 🎁 ⇛ ɢ ʀ σ υ ᴘ : {boxName}\n" +
+                "├── 🩷 ⇛ ϻ є ϻ ʙ є ʀ s : {count}\n" +
+                "├── 👤 ⇛ ᴀᴅᴅᴇᴅ ʙʏ : {authorName}\n" +
+                "│\n" +
+                "├── [  ɢ ʀ σ υ ᴘ  ʀ υ ʟ є s ]\n" +
+                "├── 😽 ⇛ ʀєsᴘєᴄᴛ ᴧʟʟ ϻєϻʙєʀs .\n" +
+                "├── 🎁 ⇛ ησ sᴘᴧϻ σʀ 18+ ᴄσηᴛєηᴛ .\n" +
+                "├── ✨ ⇛ ʜᴧᴠє ᴧ ɢᴏᴏᴅ ᴛɪᴍє ʜєʀє !\n" +
+                "│\n" +
+                "╰── ᴘ σ ᴡ є ʀ є ᴅ  ʙ ʏ  s ɪ ꜰ υ"
         }
     },
 
-    onStart: async ({ api, event, threadsData, getLang }) => {
+    onStart: async ({ api, event, threadsData, usersData, getLang }) => {
         if (event.logMessageType !== "log:subscribe") return;
 
         return async function () {
-            const { threadID } = event;
+            const { threadID, author } = event;
             const participants = event.logMessageData?.addedParticipants || [];
             if (!participants.length) return;
 
@@ -151,8 +170,18 @@ module.exports = {
                 return;
             }
 
+            let authorName = "Someone";
+            try {
+                authorName = await usersData.getName(author) || "Someone";
+            } catch (_) {
+                try {
+                    const uInfo = await api.getUserInfo(author);
+                    authorName = uInfo[author]?.name || "Someone";
+                } catch (__) {}
+            }
+
             if (!global.temp.welcomeEvent[threadID]) {
-                global.temp.welcomeEvent[threadID] = { timer: null, batch: [] };
+                global.temp.welcomeEvent[threadID] = { timer: null, batch: [], authorName };
             }
 
             for (const user of participants) {
@@ -167,8 +196,9 @@ module.exports = {
 
             global.temp.welcomeEvent[threadID].timer = setTimeout(() => {
                 const batch = global.temp.welcomeEvent[threadID]?.batch || [];
+                const savedAuthor = global.temp.welcomeEvent[threadID]?.authorName || authorName;
                 delete global.temp.welcomeEvent[threadID];
-                flushBatch(threadID, batch, api, threadsData).catch(() => {});
+                flushBatch(threadID, batch, api, threadsData, savedAuthor).catch(() => {});
             }, BATCH_MS);
         };
     }
